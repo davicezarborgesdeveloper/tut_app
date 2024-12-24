@@ -53,14 +53,19 @@ ThemeData getApplicationTheme() {
     ),
     // Text theme
     textTheme: TextTheme(
-        displayLarge: getSemiBoldStyle(
-            color: ColorManager.darkPrimary, fontSize: FontSize.s16),
-        titleMedium: getMediumStyle(
-          color: ColorManager.lightGrey,
-          fontSize: FontSize.s14,
-        ),
-        bodySmall: getRegularStyle(color: ColorManager.grey1),
-        bodyLarge: getRegularStyle(color: ColorManager.grey)),
+      displayLarge: getSemiBoldStyle(
+          color: ColorManager.darkPrimary, fontSize: FontSize.s16), // headline1
+      titleMedium: getMediumStyle(
+        color: ColorManager.lightGrey,
+        fontSize: FontSize.s14,
+      ), // subtitle1
+      titleSmall: getMediumStyle(
+        color: ColorManager.primary,
+        fontSize: FontSize.s14,
+      ), // subtitle1/ subtitle2
+      bodySmall: getRegularStyle(color: ColorManager.grey1), // caption
+      bodyLarge: getRegularStyle(color: ColorManager.grey), // bodyText1
+    ),
     // input decoration theme (text form field)
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(AppPadding.p8),
