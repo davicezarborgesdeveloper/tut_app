@@ -164,9 +164,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
 }
 
 class OnboardingPage extends StatelessWidget {
-  final SliderObject _sliderObject;
+  final SliderObject sliderObject;
   const OnboardingPage(
-    this._sliderObject, {
+    this.sliderObject, {
     super.key,
   });
 
@@ -179,7 +179,7 @@ class OnboardingPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(AppPadding.p8),
           child: Text(
-            _sliderObject.title ?? '',
+            sliderObject.title,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.displayLarge,
           ),
@@ -187,13 +187,13 @@ class OnboardingPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(AppPadding.p8),
           child: Text(
-            _sliderObject.subTitle ?? '',
+            sliderObject.subTitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         const SizedBox(height: AppSize.s60),
-        Image.asset(_sliderObject.image!)
+        Image.asset(sliderObject.image)
       ],
     );
   }
