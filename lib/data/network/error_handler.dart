@@ -1,11 +1,12 @@
 import 'package:complete_advanced_flutter/data/network/failure.dart';
+import 'package:dio/dio.dart';
 
 enum DataSource {
   success,
   noContent,
   badRequest,
   forbidden,
-  unauthorised,
+  unauthorized,
   notFound,
   internalServerError,
   connectTimeout,
@@ -14,6 +15,56 @@ enum DataSource {
   sendTimeout,
   cacheError,
   noInternetConnection,
+  unknown,
+}
+
+class ErrorHandler implements Exception {
+  late Failure failure;
+  ErrorHandler.handle(dynamic error) {
+    // ignore: deprecated_member_use
+    if (error is DioError) {
+      failure = _handlerError(error);
+    } else {
+      failure = DataSource.unknown.getFailure();
+    }
+  }
+
+  // ignore: deprecated_member_use
+  Failure _handlerError(DioError error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+        return DataSource.connectTimeout.getFailure();
+      case DioExceptionType.sendTimeout:
+        return DataSource.sendTimeout.getFailure();
+      case DioExceptionType.receiveTimeout:
+        return DataSource.receiveTimeout.getFailure();
+      case DioExceptionType.badCertificate:
+        return DataSource.unknown.getFailure();
+      case DioExceptionType.cancel:
+        return DataSource.cancel.getFailure();
+      case DioExceptionType.connectionError:
+        return DataSource.unknown.getFailure();
+      case DioExceptionType.unknown:
+        return DataSource.unknown.getFailure();
+      case DioExceptionType.badResponse:
+        switch (error.response?.statusCode) {
+          case ResponseCode.badRequest:
+            return DataSource.badRequest.getFailure();
+          case ResponseCode.forbidden:
+            return DataSource.forbidden.getFailure();
+          case ResponseCode.unauthorized:
+            return DataSource.unauthorized.getFailure();
+          case ResponseCode.notFound:
+            return DataSource.notFound.getFailure();
+          case ResponseCode.internalServerError:
+            return DataSource.internalServerError.getFailure();
+          default:
+            return DataSource.unknown.getFailure();
+        }
+      default:
+        return DataSource.unknown.getFailure();
+    }
+  }
 }
 
 extension DataSourceExtension on DataSource {
@@ -23,7 +74,7 @@ extension DataSourceExtension on DataSource {
         return Failure(ResponseCode.badRequest, ResponseMessage.badRequest);
       case DataSource.forbidden:
         return Failure(ResponseCode.forbidden, ResponseMessage.forbidden);
-      case DataSource.unauthorised:
+      case DataSource.unauthorized:
         return Failure(ResponseCode.unauthorized, ResponseMessage.unauthorized);
       case DataSource.notFound:
         return Failure(ResponseCode.notFound, ResponseMessage.notFound);
@@ -42,6 +93,8 @@ extension DataSourceExtension on DataSource {
       case DataSource.noInternetConnection:
         return Failure(ResponseCode.noInternetConnection,
             ResponseMessage.noInternetConnection);
+      case DataSource.unknown:
+        return Failure(ResponseCode.unknown, ResponseMessage.unknown);
       default:
         return Failure(ResponseCode.unknown, ResponseMessage.unknown);
     }
@@ -88,4 +141,9 @@ class ResponseMessage {
   static const String cacheError = "Cache error, try again later";
   static const String noInternetConnection =
       "Please check your internet connection";
+}
+
+class ApiInternalStatus {
+  static const int success = 0;
+  static const int failure = 1;
 }

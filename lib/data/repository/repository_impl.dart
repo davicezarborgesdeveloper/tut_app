@@ -1,5 +1,6 @@
 import 'package:complete_advanced_flutter/data/data_source/remote_data_source.dart';
 import 'package:complete_advanced_flutter/data/mapper/mapper.dart';
+import 'package:complete_advanced_flutter/data/network/error_handler.dart';
 import 'package:complete_advanced_flutter/data/network/failure.dart';
 import 'package:complete_advanced_flutter/data/network/network_info.dart';
 import 'package:complete_advanced_flutter/data/request/request.dart';
@@ -16,24 +17,28 @@ class RepositoryImpl implements Repository {
   Future<Either<Failure, Authentication>> login(
       LoginRequest loginRequest) async {
     if (await _networkInfo.isConnected) {
-      // its safe to call the API
-      final response = await _remoteDataSource.login(loginRequest);
+      try {
+        // its safe to call the API
+        final response = await _remoteDataSource.login(loginRequest);
 
-      if (response.status == 0) {
-        //success
-        // return data (success)
-        // return right
-        return Right(response.toDomain());
-      } else {
-        // return bussines logic error
-        // return left
+        if (response.status == ApiInternalStatus.success) //success
+        {
+          // return data (success)
+          // return right
+          return Right(response.toDomain());
+        } else {
+          // return bussines logic error
+          // return left
 
-        return Left(Failure(409,
-            response.message ?? "we have bussines error logic from API side"));
+          return Left(Failure(response.status ?? ApiInternalStatus.failure,
+              response.message ?? ResponseMessage.unknown));
+        }
+      } catch (error) {
+        return Left(ErrorHandler.handle(error).failure);
       }
     } else {
       // return connection error
-      return Left(Failure(501, "please check your internet connection"));
+      return Left(DataSource.noInternetConnection.getFailure());
     }
   }
 }
