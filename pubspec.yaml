@@ -45,6 +45,9 @@ dependencies:
   internet_connection_checker_plus: ^2.7.0
   pretty_dio_logger: ^1.4.0
   shared_preferences: ^2.3.5
+  device_info_plus: ^11.2.1
+  freezed: ^2.5.7
+  freezed_annotation: ^2.4.4
 
 dev_dependencies:
   flutter_test:

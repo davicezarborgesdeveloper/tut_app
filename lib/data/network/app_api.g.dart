@@ -54,7 +54,6 @@ class _AppServiceClient implements AppServiceClient {
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AuthenticationResponse _value;
-
     _value = AuthenticationResponse.fromJson(_result.data!);
 
     return _value;

@@ -15,4 +15,11 @@ class AppStrings {
   static const String onboardingsubTitle4 =
       "Tut app is an awesome flutter application using clean architecture #4";
   static const String skip = "Skip";
+  static const String userName = "Username";
+  static const String userNameError = "Username is wrong";
+  static const String password = "Password";
+  static const String passwordError = "Password is wrong";
+  static const String login = "Login";
+  static const String forgetPassword = "Forget Password";
+  static const String register = "Not a member ? Sign up";
 }
