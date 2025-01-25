@@ -6,9 +6,9 @@ import 'package:complete_advanced_flutter/domain/repository/repository.dart';
 import 'package:complete_advanced_flutter/domain/usecase/base_usecase.dart';
 import 'package:dartz/dartz.dart';
 
-class LoginUserCase implements BaseUsecase<LoginUserCaseInput, Authentication> {
+class LoginUseCase implements BaseUsecase<LoginUserCaseInput, Authentication> {
   final Repository _repository;
-  LoginUserCase(this._repository);
+  LoginUseCase(this._repository);
   @override
   Future<Either<Failure, Authentication>> execute(
       LoginUserCaseInput input) async {
