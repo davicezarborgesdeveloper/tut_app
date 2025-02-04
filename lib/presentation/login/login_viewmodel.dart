@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:complete_advanced_flutter/domain/usecase/login_usercase.dart';
 import 'package:complete_advanced_flutter/presentation/base/base_view_model.dart';
 import 'package:complete_advanced_flutter/presentation/common/freezed_data.dart';
+import 'package:complete_advanced_flutter/presentation/common/state_renderer/state_renderer.dart';
+import 'package:complete_advanced_flutter/presentation/common/state_renderer/state_renderer_impl.dart';
 
 class LoginViewModel extends BaseViewModel
     with LoginViewModelInputs, LoginViewModelOutputs {
@@ -16,9 +18,9 @@ class LoginViewModel extends BaseViewModel
 
   var loginObject = LoginObject("", "");
 
-  LoginUseCase _loginUserCase;
+  LoginUseCase _loginUseCase;
 
-  LoginViewModel(this._loginUserCase);
+  LoginViewModel(this._loginUseCase);
 
   @override
   void dispose() {
@@ -29,7 +31,8 @@ class LoginViewModel extends BaseViewModel
 
   @override
   void start() {
-    // TODO: implement start
+    // Tview tells state render, please show the content of the screen
+    inputState.add(ContentState());
   }
 
   @override
@@ -43,9 +46,20 @@ class LoginViewModel extends BaseViewModel
 
   @override
   login() async {
-    (await _loginUserCase?.execute(
-            LoginUserCaseInput(loginObject.userName, loginObject.password)))!
-        .fold((failure) => {}, (data) => {});
+    inputState.add(
+        LoadingState(stateRendererType: StateRendererType.popupLoadingState));
+    (await _loginUseCase.execute(
+            LoginUseCaseInput(loginObject.userName, loginObject.password)))
+        .fold(
+            (failure) => {
+                  print(failure),
+                  // left -> failure
+                  inputState.add(ErrorState(
+                      StateRendererType.popupErrorState, failure.message))
+                }, (data) {
+      // right -> success (data)
+      inputState.add(ContentState());
+    });
   }
 
   @override
