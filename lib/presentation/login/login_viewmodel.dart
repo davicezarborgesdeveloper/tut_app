@@ -52,7 +52,6 @@ class LoginViewModel extends BaseViewModel
             LoginUseCaseInput(loginObject.userName, loginObject.password)))
         .fold(
             (failure) => {
-                  print(failure),
                   // left -> failure
                   inputState.add(ErrorState(
                       StateRendererType.popupErrorState, failure.message))
