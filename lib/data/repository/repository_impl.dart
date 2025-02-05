@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:complete_advanced_flutter/data/data_source/remote_data_source.dart';
 import 'package:complete_advanced_flutter/data/mapper/mapper.dart';
 import 'package:complete_advanced_flutter/data/network/error_handler.dart';
@@ -7,6 +9,7 @@ import 'package:complete_advanced_flutter/data/request/request.dart';
 import 'package:complete_advanced_flutter/domain/model/model.dart';
 import 'package:complete_advanced_flutter/domain/repository/repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 
 class RepositoryImpl implements Repository {
   final RemoteDataSource _remoteDataSource;
@@ -21,7 +24,6 @@ class RepositoryImpl implements Repository {
       try {
         // its safe to call the API
         final response = await _remoteDataSource.login(loginRequest);
-
         if (response.status == ApiInternalStatus.SUCCESS) // success
         {
           // return data (success)
@@ -33,7 +35,8 @@ class RepositoryImpl implements Repository {
           return Left(Failure(response.status ?? ApiInternalStatus.FAILURE,
               response.message ?? ResponseMessage.DEFAULT));
         }
-      } catch (error) {
+      } on DioException catch (error, s) {
+        log("XYZ", error: error, stackTrace: s);
         return (Left(ErrorHandler.handle(error).failure));
       }
     } else {

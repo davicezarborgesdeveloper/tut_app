@@ -12,6 +12,7 @@ class _AppServiceClient implements AppServiceClient {
   _AppServiceClient(
     this._dio, {
     this.baseUrl,
+    this.errorLogger,
   }) {
     baseUrl ??= 'https://daviborges123.wiremockapi.cloud';
   }
@@ -19,6 +20,8 @@ class _AppServiceClient implements AppServiceClient {
   final Dio _dio;
 
   String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
 
   @override
   Future<AuthenticationResponse> login(
@@ -54,8 +57,12 @@ class _AppServiceClient implements AppServiceClient {
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late AuthenticationResponse _value;
-    _value = AuthenticationResponse.fromJson(_result.data!);
-
+    try {
+      _value = AuthenticationResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
