@@ -13,6 +13,7 @@ class RepositoryImpl implements Repository {
   final NetworkInfo _networkInfo;
 
   RepositoryImpl(this._remoteDataSource, this._networkInfo);
+
   @override
   Future<Either<Failure, Authentication>> login(
       LoginRequest loginRequest) async {
@@ -21,24 +22,23 @@ class RepositoryImpl implements Repository {
         // its safe to call the API
         final response = await _remoteDataSource.login(loginRequest);
 
-        if (response.status == ApiInternalStatus.success) //success
+        if (response.status == ApiInternalStatus.SUCCESS) // success
         {
           // return data (success)
           // return right
           return Right(response.toDomain());
         } else {
-          // return bussines logic error
+          // return biz logic error
           // return left
-
-          return Left(Failure(response.status ?? ApiInternalStatus.failure,
-              response.message ?? ResponseMessage.unknown));
+          return Left(Failure(response.status ?? ApiInternalStatus.FAILURE,
+              response.message ?? ResponseMessage.DEFAULT));
         }
       } catch (error) {
-        return Left(ErrorHandler.handle(error).failure);
+        return (Left(ErrorHandler.handle(error).failure));
       }
     } else {
       // return connection error
-      return Left(DataSource.noInternetConnection.getFailure());
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
     }
   }
 }

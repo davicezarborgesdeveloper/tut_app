@@ -4,13 +4,22 @@ import 'package:complete_advanced_flutter/data/mapper/mapper.dart';
 
 extension NonNullString on String? {
   String orEmpty() {
-    return this ?? empty;
+    if (this == null) {
+      return EMPTY;
+    } else {
+      return this!;
+    }
   }
 }
 
 // extension on Integer
-extension NonNullIn on int? {
+
+extension NonNullInteger on int? {
   int orZero() {
-    return this ?? zero;
+    if (this == null) {
+      return ZERO;
+    } else {
+      return this!;
+    }
   }
 }

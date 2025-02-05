@@ -3,10 +3,10 @@ import 'package:complete_advanced_flutter/presentation/resources/theme_manager.d
 import 'package:flutter/material.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp._internal(); // private named constructor
-  // int appState = 0;
+  MyApp._internal(); // private named constructor
+  int appState = 0;
   static MyApp get instance =>
-      const MyApp._internal(); // single instance -- singleton
+      MyApp._internal(); // single instance -- singleton
 
   factory MyApp() => instance; // factory for the class instance
 

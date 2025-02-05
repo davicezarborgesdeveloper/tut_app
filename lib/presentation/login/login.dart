@@ -10,18 +10,17 @@ import 'package:flutter/material.dart';
 import '../resources/values_manager.dart';
 
 class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+  const LoginView({Key? key}) : super(key: key);
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
-  final LoginViewModel _viewModel = instance<LoginViewModel>();
+  LoginViewModel _viewModel = instance<LoginViewModel>();
 
-  final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   _bind() {
@@ -39,139 +38,128 @@ class _LoginViewState extends State<LoginView> {
   }
 
   @override
-  void dispose() {
-    _viewModel.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
+      backgroundColor: ColorManager.white,
+      body: StreamBuilder<FlowState>(
         stream: _viewModel.outputState,
-        builder: (context, snapshot) =>
-            snapshot.data?.getScreenWidget(context, _getContentWidget(), () {
-              _viewModel.login();
-            }) ??
-            _getContentWidget(),
+        builder: (context, snapshot) {
+          return snapshot.data?.getScreenWidget(context, _getContentWidget(),
+                  () {
+                _viewModel.login();
+              }) ??
+              _getContentWidget();
+        },
       ),
     );
   }
 
   Widget _getContentWidget() {
     return Container(
-      padding: const EdgeInsets.only(top: AppPadding.p100),
-      color: ColorManager.white,
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              // SvgPicture.asset(ImageAssets.loginIc),
-              const Image(
-                image: AssetImage(ImageAssets.splashLogo),
-              ),
-              const SizedBox(height: AppSize.s28),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: AppPadding.p28, right: AppPadding.p28),
-                child: StreamBuilder<bool>(
+        padding: EdgeInsets.only(top: AppPadding.p100),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Image(image: AssetImage(ImageAssets.splashLogo)),
+                SizedBox(height: AppSize.s28),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: AppPadding.p28, right: AppPadding.p28),
+                  child: StreamBuilder<bool>(
                     stream: _viewModel.outputIsUserNameValid,
                     builder: (context, snapshot) {
                       return TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         controller: _userNameController,
                         decoration: InputDecoration(
-                          hintText: AppStrings.userName,
-                          labelText: AppStrings.userName,
-                          errorText: (snapshot.data ?? true)
-                              ? null
-                              : AppStrings.userNameError,
-                        ),
+                            hintText: AppStrings.username,
+                            labelText: AppStrings.username,
+                            errorText: (snapshot.data ?? true)
+                                ? null
+                                : AppStrings.usernameError),
                       );
-                    }),
-              ),
-              const SizedBox(height: AppSize.s28),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: AppPadding.p28, right: AppPadding.p28),
-                child: StreamBuilder<bool>(
-                    stream: _viewModel.outputIsUserPasswordValid,
+                    },
+                  ),
+                ),
+                SizedBox(height: AppSize.s28),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: AppPadding.p28, right: AppPadding.p28),
+                  child: StreamBuilder<bool>(
+                    stream: _viewModel.outputIsPasswordValid,
                     builder: (context, snapshot) {
                       return TextFormField(
                         keyboardType: TextInputType.visiblePassword,
                         controller: _passwordController,
                         decoration: InputDecoration(
-                          hintText: AppStrings.password,
-                          labelText: AppStrings.password,
-                          errorText: (snapshot.data ?? true)
-                              ? null
-                              : AppStrings.passwordError,
-                        ),
+                            hintText: AppStrings.password,
+                            labelText: AppStrings.password,
+                            errorText: (snapshot.data ?? true)
+                                ? null
+                                : AppStrings.passwordError),
                       );
-                    }),
-              ),
-              const SizedBox(height: AppSize.s28),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: AppPadding.p28, right: AppPadding.p28),
-                child: StreamBuilder(
-                    stream: _viewModel.outputIsAllInputValid,
-                    builder: (context, snapshot) {
-                      return SizedBox(
-                        width: double.infinity,
-                        height: AppSize.s40,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: ColorManager.primary,
-                                foregroundColor: Colors.white),
-                            onPressed: (snapshot.data ?? false)
-                                ? () {
-                                    _viewModel.login();
-                                  }
-                                : null,
-                            child: const Text(AppStrings.login)),
-                      );
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: AppPadding.p8,
-                  left: AppPadding.p28,
-                  right: AppPadding.p28,
+                    },
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, Routes.loginRoute);
+                SizedBox(height: AppSize.s28),
+                Padding(
+                    padding: EdgeInsets.only(
+                        left: AppPadding.p28, right: AppPadding.p28),
+                    child: StreamBuilder<bool>(
+                      stream: _viewModel.outputIsAllInputsValid,
+                      builder: (context, snapshot) {
+                        return SizedBox(
+                          width: double.infinity,
+                          height: AppSize.s40,
+                          child: ElevatedButton(
+                              onPressed: (snapshot.data ?? false)
+                                  ? () {
+                                      _viewModel.login();
+                                    }
+                                  : null,
+                              child: Text(AppStrings.login)),
+                        );
                       },
-                      child: Text(
-                        AppStrings.forgetPassword,
-                        style: Theme.of(context).textTheme.titleSmall,
-                        textAlign: TextAlign.end,
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: AppPadding.p8,
+                    left: AppPadding.p28,
+                    right: AppPadding.p28,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, Routes.forgotPasswordRoute);
+                        },
+                        child: Text(AppStrings.forgetPassword,
+                            style: Theme.of(context).textTheme.titleSmall),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, Routes.loginRoute);
-                      },
-                      child: Text(
-                        AppStrings.register,
-                        style: Theme.of(context).textTheme.titleSmall,
-                        textAlign: TextAlign.end,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, Routes.registerRoute);
+                        },
+                        child: Text(AppStrings.registerText,
+                            style: Theme.of(context).textTheme.titleSmall),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
+  }
+
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
   }
 }

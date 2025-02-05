@@ -11,35 +11,38 @@ TextStyle _getTextStyle(
 }
 
 // regular style
+
 TextStyle getRegularStyle(
     {double fontSize = FontSize.s12, required Color color}) {
   return _getTextStyle(
-      fontSize, FontConstant.fontFamily, FontWeightManager.regular, color);
+      fontSize, FontConstants.fontFamily, FontWeightManager.regular, color);
 }
-
 // light text style
+
 TextStyle getLightStyle(
     {double fontSize = FontSize.s12, required Color color}) {
   return _getTextStyle(
-      fontSize, FontConstant.fontFamily, FontWeightManager.light, color);
+      fontSize, FontConstants.fontFamily, FontWeightManager.light, color);
 }
-
 // bold text style
+
 TextStyle getBoldStyle({double fontSize = FontSize.s12, required Color color}) {
   return _getTextStyle(
-      fontSize, FontConstant.fontFamily, FontWeightManager.bold, color);
+      fontSize, FontConstants.fontFamily, FontWeightManager.bold, color);
 }
 
-// semiBold text style
+// semi bold text style
+
 TextStyle getSemiBoldStyle(
     {double fontSize = FontSize.s12, required Color color}) {
   return _getTextStyle(
-      fontSize, FontConstant.fontFamily, FontWeightManager.semiBold, color);
+      fontSize, FontConstants.fontFamily, FontWeightManager.semiBold, color);
 }
 
-// Medium text style
+// medium text style
+
 TextStyle getMediumStyle(
     {double fontSize = FontSize.s12, required Color color}) {
   return _getTextStyle(
-      fontSize, FontConstant.fontFamily, FontWeightManager.medium, color);
+      fontSize, FontConstants.fontFamily, FontWeightManager.medium, color);
 }

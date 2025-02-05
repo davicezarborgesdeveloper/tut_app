@@ -1,29 +1,25 @@
-// to convert the response to into a non nullable object (model)
-
 import 'package:complete_advanced_flutter/app/extensions.dart';
 import 'package:complete_advanced_flutter/data/responses/responses.dart';
 import 'package:complete_advanced_flutter/domain/model/model.dart';
 
-const empty = '';
-const zero = 0;
+// to convert the response into a non nullable object (model)
+
+const EMPTY = "";
+const ZERO = 0;
 
 extension CustomerResponseMapper on CustomerResponse? {
   Customer toDomain() {
     return Customer(
-      this?.id?.orEmpty() ?? empty,
-      this?.name?.orEmpty() ?? empty,
-      this?.numOfNotifications.orZero() ?? zero,
-    );
+        this?.id?.orEmpty() ?? EMPTY,
+        this?.name?.orEmpty() ?? EMPTY,
+        this?.numOfNotifications?.orZero() ?? ZERO);
   }
 }
 
 extension ContactsResponseMapper on ContactsResponse? {
   Contacts toDomain() {
-    return Contacts(
-      this?.email?.orEmpty() ?? empty,
-      this?.phone?.orEmpty() ?? empty,
-      this?.link.orEmpty() ?? empty,
-    );
+    return Contacts(this?.email?.orEmpty() ?? EMPTY,
+        this?.phone?.orEmpty() ?? EMPTY, this?.link?.orEmpty() ?? EMPTY);
   }
 }
 

@@ -5,7 +5,7 @@ import 'package:complete_advanced_flutter/presentation/main/main_view.dart';
 import 'package:complete_advanced_flutter/presentation/onboarding/onboarding.dart';
 import 'package:complete_advanced_flutter/presentation/register/register.dart';
 import 'package:complete_advanced_flutter/presentation/splash/splash.dart';
-import 'package:complete_advanced_flutter/presentation/store/store_details.dart';
+import 'package:complete_advanced_flutter/presentation/store_details/store_details.dart';
 import 'package:flutter/material.dart';
 
 import 'string_manager.dart';

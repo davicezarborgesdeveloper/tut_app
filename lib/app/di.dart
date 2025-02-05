@@ -30,7 +30,7 @@ Future<void> initAppModule() async {
   // dio factory
   instance.registerLazySingleton<DioFactory>(() => DioFactory(instance()));
 
-  // app service client
+  // app  service client
   final dio = await instance<DioFactory>().getDio();
   instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
 

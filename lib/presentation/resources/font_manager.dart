@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FontConstant {
+class FontConstants {
   static const String fontFamily = "Montserrat";
 }
 

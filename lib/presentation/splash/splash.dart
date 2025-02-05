@@ -6,17 +6,17 @@ import 'package:complete_advanced_flutter/presentation/resources/routes_manager.
 import 'package:flutter/material.dart';
 
 class SplashView extends StatefulWidget {
-  const SplashView({super.key});
+  const SplashView({Key? key}) : super(key: key);
 
   @override
-  State<SplashView> createState() => _SplashViewState();
+  _SplashViewState createState() => _SplashViewState();
 }
 
 class _SplashViewState extends State<SplashView> {
   Timer? _timer;
 
   _startDelay() {
-    _timer = Timer(const Duration(seconds: 2), _goNext);
+    _timer = Timer(Duration(seconds: 2), _goNext);
   }
 
   _goNext() {
@@ -39,7 +39,7 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.primary,
-      body: const Center(
+      body: Center(
         child: Image(
           image: AssetImage(ImageAssets.splashLogo),
         ),
