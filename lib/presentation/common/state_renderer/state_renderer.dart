@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, constant_identifier_names
 
 import 'package:complete_advanced_flutter/data/mapper/mapper.dart';
 import 'package:complete_advanced_flutter/presentation/resources/assets_manager.dart';
@@ -30,14 +30,13 @@ class StateRenderer extends StatelessWidget {
   Function? retryActionFunction;
 
   StateRenderer(
-      {Key? key,
+      {super.key,
       required this.stateRendererType,
       String? message,
       String? title,
       required this.retryActionFunction})
       : message = message ?? AppStrings.loading,
-        title = title ?? EMPTY,
-        super(key: key);
+        title = title ?? EMPTY;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +84,7 @@ class StateRenderer extends StatelessWidget {
             color: ColorManager.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(AppSize.s14),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black26,
                   blurRadius: AppSize.s12,

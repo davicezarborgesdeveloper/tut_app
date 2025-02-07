@@ -1,5 +1,5 @@
 import 'package:complete_advanced_flutter/data/responses/responses.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/http.dart';
 
 import '../../app/constant.dart';
@@ -16,4 +16,9 @@ abstract class AppServiceClient {
     @Field("imei") String imei,
     @Field("deviceType") String deviceType,
   );
+}
+
+abstract class ParseErrorLogger {
+  void logError(
+      Object error, StackTrace stackTrace, RequestOptions requestOptions);
 }

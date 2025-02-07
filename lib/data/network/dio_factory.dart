@@ -1,14 +1,12 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:archive/archive.dart';
 import 'package:complete_advanced_flutter/app/app_prefs.dart';
 import 'package:complete_advanced_flutter/app/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
-const String applicationJson = 'application/json';
-const String contentType = 'content-type';
-const String accept = 'accept';
-const String authorization = 'authorization';
-const String defaultLanguage = 'language';
 
 const String APPLICATION_JSON = "application/json";
 const String CONTENT_TYPE = "content-type";
@@ -33,14 +31,31 @@ class DioFactory {
     };
 
     dio.options = BaseOptions(
-        baseUrl: Constant.baseUrl,
-        connectTimeout: Duration(milliseconds: _timeOut),
-        receiveTimeout: Duration(milliseconds: _timeOut),
-        headers: headers);
+      baseUrl: Constant.baseUrl,
+      connectTimeout: Duration(milliseconds: _timeOut),
+      receiveTimeout: Duration(milliseconds: _timeOut),
+      headers: headers,
+    );
 
     if (kReleaseMode) {
-      print("release mode no logs");
+      debugPrint("release mode no logs");
     } else {
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onResponse: (Response response, ResponseInterceptorHandler handler) {
+            if (response.data.runtimeType == String) {
+              response.data = jsonDecode(response.data);
+            }
+            return handler.next(response);
+          },
+        ),
+      );
+      // dio.interceptors.add(LogInterceptor(
+      //   requestBody: true,
+      //   responseBody: true,
+      //   requestHeader: true,
+      //   responseHeader: true,
+      // ));
       dio.interceptors.add(PrettyDioLogger(
           requestHeader: true, requestBody: true, responseHeader: true));
     }

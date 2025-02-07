@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
+    useMaterial3: false,
     // main colors of the app
     primaryColor: ColorManager.primary,
     primaryColorLight: ColorManager.primaryOpacity70,
@@ -44,8 +45,8 @@ ThemeData getApplicationTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         textStyle: getRegularStyle(color: ColorManager.white),
-        foregroundColor: ColorManager.primary,
-        backgroundColor: ColorManager.white,
+        foregroundColor: ColorManager.white,
+        backgroundColor: ColorManager.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s12),
         ),

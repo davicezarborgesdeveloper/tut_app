@@ -7,6 +7,8 @@ class BaseResponse {
   int? status;
   @JsonKey(name: "message")
   String? message;
+
+  BaseResponse({this.status, this.message});
 }
 
 @JsonSerializable()
@@ -54,7 +56,7 @@ class AuthenticationResponse extends BaseResponse {
   @JsonKey(name: "contacts")
   ContactsResponse? contacts;
 
-  AuthenticationResponse(this.customer, this.contacts);
+  AuthenticationResponse({this.customer, this.contacts});
 
 // from json
   factory AuthenticationResponse.fromJson(Map<String, dynamic> json) =>
