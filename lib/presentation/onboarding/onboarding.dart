@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, library_private_types_in_public_api
+import 'package:complete_advanced_flutter/app/app_prefs.dart';
 import 'package:complete_advanced_flutter/presentation/onboarding/onboarding_viewmodel.dart';
 import 'package:complete_advanced_flutter/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:complete_advanced_flutter/presentation/resources/string_manager.
 import 'package:complete_advanced_flutter/presentation/resources/values_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../app/di.dart';
 import '../../domain/model/model.dart';
 
 class OnBoardingView extends StatefulWidget {
@@ -22,8 +24,10 @@ class OnBoardingView extends StatefulWidget {
 class _OnBoardingViewState extends State<OnBoardingView> {
   final PageController _pageController = PageController(initialPage: 0);
   final OnBoardingViewModel _viewModel = OnBoardingViewModel();
+  final AppPreferences _appPreferences = instance<AppPreferences>();
 
   _bind() {
+    _appPreferences.setOnboardingScreenViewed();
     _viewModel.start();
   }
 
@@ -170,7 +174,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
 class OnBoardingPage extends StatelessWidget {
   final SliderObject _sliderObject;
 
-  OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
+  const OnBoardingPage(this._sliderObject, {super.key});
 
   @override
   Widget build(BuildContext context) {

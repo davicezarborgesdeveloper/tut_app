@@ -4,7 +4,7 @@ import 'package:complete_advanced_flutter/presentation/common/state_renderer/sta
 
 abstract class BaseViewModel extends BaseViewModelInputs
     implements BaseViewModelOutputs {
-  StreamController _inputStateStreamController =
+  final StreamController _inputStateStreamController =
       StreamController<FlowState>.broadcast();
 
   @override

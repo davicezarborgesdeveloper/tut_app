@@ -1,3 +1,4 @@
+import 'package:complete_advanced_flutter/app/app_prefs.dart';
 import 'package:complete_advanced_flutter/app/di.dart';
 import 'package:complete_advanced_flutter/presentation/common/state_renderer/state_renderer_impl.dart';
 import 'package:complete_advanced_flutter/presentation/login/login_viewmodel.dart';
@@ -11,17 +12,18 @@ import 'package:flutter/scheduler.dart';
 import '../resources/values_manager.dart';
 
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
-  LoginViewModel _viewModel = instance<LoginViewModel>();
+  final LoginViewModel _viewModel = instance<LoginViewModel>();
+  final AppPreferences _appPreferences = instance<AppPreferences>();
 
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   _bind() {
@@ -34,6 +36,7 @@ class _LoginViewState extends State<LoginView> {
         .listen((isSuccessLoggedIn) {
       // navigate to main screen
       SchedulerBinding.instance.addPostFrameCallback((_) {
+        _appPreferences.setIsUserLoggedIn();
         Navigator.of(context).pushReplacementNamed(Routes.mainRoute);
       });
     });
@@ -64,16 +67,16 @@ class _LoginViewState extends State<LoginView> {
 
   Widget _getContentWidget() {
     return Container(
-        padding: EdgeInsets.only(top: AppPadding.p100),
+        padding: const EdgeInsets.only(top: AppPadding.p100),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                Image(image: AssetImage(ImageAssets.splashLogo)),
-                SizedBox(height: AppSize.s28),
+                const Image(image: AssetImage(ImageAssets.splashLogo)),
+                const SizedBox(height: AppSize.s28),
                 Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                       left: AppPadding.p28, right: AppPadding.p28),
                   child: StreamBuilder<bool>(
                     stream: _viewModel.outputIsUserNameValid,
@@ -91,9 +94,9 @@ class _LoginViewState extends State<LoginView> {
                     },
                   ),
                 ),
-                SizedBox(height: AppSize.s28),
+                const SizedBox(height: AppSize.s28),
                 Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                       left: AppPadding.p28, right: AppPadding.p28),
                   child: StreamBuilder<bool>(
                     stream: _viewModel.outputIsPasswordValid,
@@ -111,9 +114,9 @@ class _LoginViewState extends State<LoginView> {
                     },
                   ),
                 ),
-                SizedBox(height: AppSize.s28),
+                const SizedBox(height: AppSize.s28),
                 Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         left: AppPadding.p28, right: AppPadding.p28),
                     child: StreamBuilder<bool>(
                       stream: _viewModel.outputIsAllInputsValid,
@@ -127,12 +130,12 @@ class _LoginViewState extends State<LoginView> {
                                       _viewModel.login();
                                     }
                                   : null,
-                              child: Text(AppStrings.login)),
+                              child: const Text(AppStrings.login)),
                         );
                       },
                     )),
                 Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: AppPadding.p8,
                     left: AppPadding.p28,
                     right: AppPadding.p28,

@@ -7,7 +7,7 @@ import 'package:complete_advanced_flutter/domain/usecase/base_usecase.dart';
 import 'package:dartz/dartz.dart';
 
 class LoginUseCase implements BaseUseCase<LoginUseCaseInput, Authentication> {
-  Repository _repository;
+  final Repository _repository;
 
   LoginUseCase(this._repository);
 
