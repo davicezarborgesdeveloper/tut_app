@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:complete_advanced_flutter/domain/usecase/forgot_password_usecase.dart';
 import 'package:complete_advanced_flutter/presentation/base/base_view_model.dart';
+import 'package:complete_advanced_flutter/presentation/common/state_renderer/state_renderer.dart';
 
 import '../../app/functions.dart';
 import '../common/state_renderer/state_renderer_impl.dart';
 
-class ForgotPasswordViewmodel extends BaseViewModel
+class ForgotPasswordViewModel extends BaseViewModel
     with ForgotPasswordViewModelInputs, ForgotPasswordViewModelOutputs {
   final StreamController _emailStreamController =
       StreamController<String>.broadcast();
@@ -15,7 +17,7 @@ class ForgotPasswordViewmodel extends BaseViewModel
 
   final ForgotPasswordUseCase _forgotPasswordUseCase;
 
-  ForgotPasswordViewmodel(this._forgotPasswordUseCase);
+  ForgotPasswordViewModel(this._forgotPasswordUseCase);
 
   var email = "";
 
@@ -25,8 +27,16 @@ class ForgotPasswordViewmodel extends BaseViewModel
   }
 
   @override
-  forgotPassword() {
-    // inputState.add(data);
+  forgotPassword() async {
+    inputState.add(
+        LoadingState(stateRendererType: StateRendererType.POPUP_LOADING_STATE));
+    (await _forgotPasswordUseCase.execute(email)).fold(
+        (failure) => {
+              inputState.add(ErrorState(
+                  StateRendererType.POPUP_ERROR_STATE, failure.message))
+            }, (data) {
+      inputState.add(ContentState());
+    });
   }
 
   @override

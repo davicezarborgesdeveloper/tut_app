@@ -35,12 +35,32 @@ class RepositoryImpl implements Repository {
           return Left(Failure(response.status ?? ApiInternalStatus.FAILURE,
               response.message ?? ResponseMessage.DEFAULT));
         }
-      } on DioException catch (error, s) {
-        log("XYZ", error: error, stackTrace: s);
+      } on DioException catch (error) {
         return (Left(ErrorHandler.handle(error).failure));
       }
     } else {
       // return connection error
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> forgotPassword(String email) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final response = await _remoteDataSource.forgotPassword(email);
+
+        if (response.status == ApiInternalStatus.SUCCESS) // success
+        {
+          return Right(response.toDomain());
+        } else {
+          return Left(Failure(response.status ?? ResponseCode.DEFAULT,
+              response.message ?? ResponseMessage.DEFAULT));
+        }
+      } on DioException catch (error) {
+        return (Left(ErrorHandler.handle(error).failure));
+      }
+    } else {
       return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
     }
   }
