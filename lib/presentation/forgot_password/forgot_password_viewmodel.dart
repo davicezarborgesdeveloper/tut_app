@@ -8,11 +8,10 @@ import '../../app/functions.dart';
 import '../common/state_renderer/state_renderer_impl.dart';
 
 class ForgotPasswordViewModel extends BaseViewModel
-    with ForgotPasswordViewModelInputs, ForgotPasswordViewModelOutputs {
+    with ForgotPasswordViewModelInput, ForgotPasswordViewModelOutput {
   final StreamController _emailStreamController =
       StreamController<String>.broadcast();
-
-  final StreamController _isAllInputsValidStreamController =
+  final StreamController _isAllInputValidStreamController =
       StreamController<void>.broadcast();
 
   final ForgotPasswordUseCase _forgotPasswordUseCase;
@@ -21,6 +20,7 @@ class ForgotPasswordViewModel extends BaseViewModel
 
   var email = "";
 
+  // input
   @override
   void start() {
     inputState.add(ContentState());
@@ -30,11 +30,10 @@ class ForgotPasswordViewModel extends BaseViewModel
   forgotPassword() async {
     inputState.add(
         LoadingState(stateRendererType: StateRendererType.POPUP_LOADING_STATE));
-    (await _forgotPasswordUseCase.execute(email)).fold(
-        (failure) => {
-              inputState.add(ErrorState(
-                  StateRendererType.POPUP_ERROR_STATE, failure.message))
-            }, (supportMessage) {
+    (await _forgotPasswordUseCase.execute(email)).fold((failure) {
+      inputState.add(
+          ErrorState(StateRendererType.POPUP_ERROR_STATE, failure.message));
+    }, (supportMessage) {
       inputState.add(SuccessState(supportMessage));
     });
   }
@@ -50,12 +49,13 @@ class ForgotPasswordViewModel extends BaseViewModel
   Sink get inputEmail => _emailStreamController.sink;
 
   @override
-  Sink get inputIsAllInputValid => _isAllInputsValidStreamController.sink;
+  Sink get inputIsAllInputValid => _isAllInputValidStreamController.sink;
 
+  // output
   @override
   void dispose() {
     _emailStreamController.close();
-    _isAllInputsValidStreamController.close();
+    _isAllInputValidStreamController.close();
   }
 
   @override
@@ -64,9 +64,10 @@ class ForgotPasswordViewModel extends BaseViewModel
 
   @override
   Stream<bool> get outputIsAllInputValid =>
-      _isAllInputsValidStreamController.stream.map((_) => _isAllInputsValid());
+      _isAllInputValidStreamController.stream
+          .map((isAllInputValid) => _isAllInputValid());
 
-  bool _isAllInputsValid() {
+  _isAllInputValid() {
     return isEmailValid(email);
   }
 
@@ -75,8 +76,9 @@ class ForgotPasswordViewModel extends BaseViewModel
   }
 }
 
-mixin ForgotPasswordViewModelInputs {
+mixin ForgotPasswordViewModelInput {
   forgotPassword();
+
   setEmail(String email);
 
   Sink get inputEmail;
@@ -84,7 +86,7 @@ mixin ForgotPasswordViewModelInputs {
   Sink get inputIsAllInputValid;
 }
 
-mixin ForgotPasswordViewModelOutputs {
+mixin ForgotPasswordViewModelOutput {
   Stream<bool> get outputIsEmailValid;
 
   Stream<bool> get outputIsAllInputValid;

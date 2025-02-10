@@ -57,7 +57,8 @@ class RepositoryImpl implements Repository {
           return Left(Failure(response.status ?? ResponseCode.DEFAULT,
               response.message ?? ResponseMessage.DEFAULT));
         }
-      } on DioException catch (error) {
+      } on DioException catch (error, s) {
+        log('Erro forgot', error: error, stackTrace: s);
         return (Left(ErrorHandler.handle(error).failure));
       }
     } else {

@@ -16,7 +16,6 @@ enum StateRendererType {
   POPUP_LOADING_STATE,
   POPUP_ERROR_STATE,
   POPUP_SUCCESS,
-
   // FULL SCREEN STATES
   FULL_SCREEN_LOADING_STATE,
   FULL_SCREEN_ERROR_STATE,
@@ -29,15 +28,18 @@ class StateRenderer extends StatelessWidget {
   String message;
   String title;
   Function? retryActionFunction;
+  Function resetFlowState;
 
   StateRenderer(
-      {super.key,
+      {Key? key,
       required this.stateRendererType,
       String? message,
       String? title,
-      required this.retryActionFunction})
+      required this.retryActionFunction,
+      required this.resetFlowState})
       : message = message ?? AppStrings.loading,
-        title = title ?? EMPTY;
+        title = title ?? EMPTY,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +65,10 @@ class StateRenderer extends StatelessWidget {
           _getRetryButton(AppStrings.ok, context)
         ]);
       case StateRendererType.FULL_SCREEN_LOADING_STATE:
-        return _getItemsInColumn(
-            [_getAnimatedImage(JsonAssets.loading), _getMessage(message)]);
+        return _getItemsInColumn([
+          _getAnimatedImage(JsonAssets.loading),
+          _getMessage(message),
+        ]);
       case StateRendererType.FULL_SCREEN_ERROR_STATE:
         return _getItemsInColumn([
           _getAnimatedImage(JsonAssets.error),
@@ -74,8 +78,10 @@ class StateRenderer extends StatelessWidget {
       case StateRendererType.CONTENT_SCREEN_STATE:
         return Container();
       case StateRendererType.EMPTY_SCREEN_STATE:
-        return _getItemsInColumn(
-            [_getAnimatedImage(JsonAssets.empty), _getMessage(message)]);
+        return _getItemsInColumn([
+          _getAnimatedImage(JsonAssets.empty),
+          _getMessage(message),
+        ]);
       default:
         return Container();
     }
@@ -92,7 +98,7 @@ class StateRenderer extends StatelessWidget {
             color: ColorManager.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(AppSize.s14),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
                   color: Colors.black26,
                   blurRadius: AppSize.s12,
@@ -148,6 +154,7 @@ class StateRenderer extends StatelessWidget {
                 } else {
                   Navigator.of(context)
                       .pop(); // popup state error so we need to dismiss the dialog
+                  resetFlowState();
                 }
               },
               child: Text(buttonTitle)),

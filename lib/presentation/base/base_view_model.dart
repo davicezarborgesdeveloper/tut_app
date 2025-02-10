@@ -14,6 +14,10 @@ abstract class BaseViewModel extends BaseViewModelInputs
   Stream<FlowState> get outputState =>
       _inputStateStreamController.stream.map((flowState) => flowState);
 
+  void resetFlowState() {
+    inputState.add(ContentState());
+  }
+
   @override
   void dispose() {
     _inputStateStreamController.close();
