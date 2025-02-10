@@ -91,6 +91,7 @@ flutter:
     - assets/json/loading.json
     - assets/json/error.json
     - assets/json/empty.json
+    - assets/json/empty.json
    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
