@@ -33,6 +33,6 @@ class RemoteDataSourceImplementer implements RemoteDataSource {
         registerRequest.email,
         registerRequest.password,
         registerRequest.mobileNumber,
-        registerRequest.profilePicture);
+        "");
   }
 }

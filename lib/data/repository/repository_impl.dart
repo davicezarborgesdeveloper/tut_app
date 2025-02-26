@@ -24,7 +24,7 @@ class RepositoryImpl implements Repository {
       try {
         // its safe to call the API
         final response = await _remoteDataSource.login(loginRequest);
-        if (response.status == ApiInternalStatus.SUCCESS) // success
+        if (response.status == ApiInternalStatus.success) // success
         {
           // return data (success)
           // return right
@@ -32,15 +32,15 @@ class RepositoryImpl implements Repository {
         } else {
           // return biz logic error
           // return left
-          return Left(Failure(response.status ?? ApiInternalStatus.FAILURE,
-              response.message ?? ResponseMessage.DEFAULT));
+          return Left(Failure(response.status ?? ApiInternalStatus.failure,
+              response.message ?? ResponseMessage.unknown));
         }
       } on DioException catch (error) {
         return (Left(ErrorHandler.handle(error).failure));
       }
     } else {
       // return connection error
-      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      return Left(DataSource.noInternetConnection.getFailure());
     }
   }
 
@@ -50,42 +50,42 @@ class RepositoryImpl implements Repository {
       try {
         final response = await _remoteDataSource.forgotPassword(email);
 
-        if (response.status == ApiInternalStatus.SUCCESS) // success
+        if (response.status == ApiInternalStatus.success) // success
         {
           return Right(response.toDomain());
         } else {
-          return Left(Failure(response.status ?? ResponseCode.DEFAULT,
-              response.message ?? ResponseMessage.DEFAULT));
+          return Left(Failure(response.status ?? ResponseCode.unknown,
+              response.message ?? ResponseMessage.unknown));
         }
       } on DioException catch (error, s) {
         log('Erro forgot', error: error, stackTrace: s);
         return (Left(ErrorHandler.handle(error).failure));
       }
     } else {
-      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      return Left(DataSource.noInternetConnection.getFailure());
     }
   }
 
   @override
-  Future<Either<Failure, String>> register(
+  Future<Either<Failure, Authentication>> register(
       RegisterRequest registerRequest) async {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _remoteDataSource.register(registerRequest);
 
-        if (response.status == ApiInternalStatus.SUCCESS) // success
+        if (response.status == ApiInternalStatus.success) // success
         {
           return Right(response.toDomain());
         } else {
-          return Left(Failure(response.status ?? ResponseCode.DEFAULT,
-              response.message ?? ResponseMessage.DEFAULT));
+          return Left(Failure(response.status ?? ResponseCode.unknown,
+              response.message ?? ResponseMessage.unknown));
         }
       } on DioException catch (error, s) {
         log('Erro forgot', error: error, stackTrace: s);
         return (Left(ErrorHandler.handle(error).failure));
       }
     } else {
-      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+      return Left(DataSource.noInternetConnection.getFailure());
     }
   }
 }

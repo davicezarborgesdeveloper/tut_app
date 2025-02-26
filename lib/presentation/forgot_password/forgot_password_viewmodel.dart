@@ -29,10 +29,10 @@ class ForgotPasswordViewModel extends BaseViewModel
   @override
   forgotPassword() async {
     inputState.add(
-        LoadingState(stateRendererType: StateRendererType.POPUP_LOADING_STATE));
+        LoadingState(stateRendererType: StateRendererType.popupLoadingState));
     (await _forgotPasswordUseCase.execute(email)).fold((failure) {
-      inputState.add(
-          ErrorState(StateRendererType.POPUP_ERROR_STATE, failure.message));
+      inputState
+          .add(ErrorState(StateRendererType.popupErrorState, failure.message));
     }, (supportMessage) {
       inputState.add(SuccessState(supportMessage));
     });

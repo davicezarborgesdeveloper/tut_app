@@ -46,11 +46,11 @@ class ContentState extends FlowState {
   ContentState();
 
   @override
-  String getMessage() => EMPTY;
+  String getMessage() => empty;
 
   @override
   StateRendererType getStateRendererType() =>
-      StateRendererType.CONTENT_SCREEN_STATE;
+      StateRendererType.contentScreenState;
 }
 
 // EMPTY STATE
@@ -65,7 +65,7 @@ class EmptyState extends FlowState {
 
   @override
   StateRendererType getStateRendererType() =>
-      StateRendererType.EMPTY_SCREEN_STATE;
+      StateRendererType.emptyScreenState;
 }
 
 // success state
@@ -78,17 +78,17 @@ class SuccessState extends FlowState {
   String getMessage() => message;
 
   @override
-  StateRendererType getStateRendererType() => StateRendererType.POPUP_SUCCESS;
+  StateRendererType getStateRendererType() => StateRendererType.popupsuccess;
 }
 
 extension FlowStateExtension on FlowState {
   Widget getScreenWidget(BuildContext context, Widget contentScreenWidget,
       Function retryActionFunction,
       {required Function resetFlowState}) {
-    switch (this.runtimeType) {
-      case LoadingState:
+    switch (this) {
+      case LoadingState _:
         {
-          if (getStateRendererType() == StateRendererType.POPUP_LOADING_STATE) {
+          if (getStateRendererType() == StateRendererType.popupLoadingState) {
             // showing popup dialog
             showPopUp(
               context,
@@ -98,7 +98,7 @@ extension FlowStateExtension on FlowState {
             );
             // return the content ui of the screen
             return contentScreenWidget;
-          } else // StateRendererType.FULL_SCREEN_LOADING_STATE
+          } else // StateRendererType.fullScreenLoadingState
           {
             return StateRenderer(
               stateRendererType: getStateRendererType(),
@@ -108,10 +108,10 @@ extension FlowStateExtension on FlowState {
             );
           }
         }
-      case ErrorState:
+      case ErrorState _:
         {
           dismissDialog(context);
-          if (getStateRendererType() == StateRendererType.POPUP_ERROR_STATE) {
+          if (getStateRendererType() == StateRendererType.popupErrorState) {
             // showing popup dialog
             showPopUp(
               context,
@@ -121,7 +121,7 @@ extension FlowStateExtension on FlowState {
             );
             // return the content ui of the screen
             return contentScreenWidget;
-          } else // StateRendererType.FULL_SCREEN_ERROR_STATE
+          } else // StateRendererType.fullScreenErrorState
           {
             return StateRenderer(
               stateRendererType: getStateRendererType(),
@@ -131,12 +131,12 @@ extension FlowStateExtension on FlowState {
             );
           }
         }
-      case ContentState:
+      case ContentState _:
         {
           dismissDialog(context);
           return contentScreenWidget;
         }
-      case EmptyState:
+      case EmptyState _:
         {
           return StateRenderer(
             stateRendererType: getStateRendererType(),
@@ -145,7 +145,7 @@ extension FlowStateExtension on FlowState {
             resetFlowState: resetFlowState,
           );
         }
-      case SuccessState:
+      case SuccessState _:
         {
           // i should check if we are showing loading popup to remove it before showing success popup
           dismissDialog(context);
@@ -153,7 +153,7 @@ extension FlowStateExtension on FlowState {
           // show popup
           showPopUp(
             context,
-            StateRendererType.POPUP_SUCCESS,
+            StateRendererType.popupsuccess,
             getMessage(),
             title: AppStrings.success,
             resetFlowState: resetFlowState,
@@ -179,8 +179,8 @@ extension FlowStateExtension on FlowState {
 
   showPopUp(
       BuildContext context, StateRendererType stateRendererType, String message,
-      {required Function resetFlowState, String title = EMPTY}) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) => showDialog(
+      {required Function resetFlowState, String title = empty}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => showDialog(
         context: context,
         builder: (BuildContext context) => StateRenderer(
               stateRendererType: stateRendererType,

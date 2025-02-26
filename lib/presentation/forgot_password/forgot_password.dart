@@ -9,10 +9,10 @@ import '../resources/color_manager.dart';
 import '../resources/string_manager.dart';
 
 class ForgotPasswordView extends StatefulWidget {
-  const ForgotPasswordView({Key? key}) : super(key: key);
+  const ForgotPasswordView({super.key});
 
   @override
-  _ForgotPasswordViewState createState() => _ForgotPasswordViewState();
+  State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {

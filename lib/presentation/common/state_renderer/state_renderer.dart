@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, constant_identifier_names
-
-import 'package:complete_advanced_flutter/data/mapper/mapper.dart';
 import 'package:complete_advanced_flutter/presentation/resources/assets_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/color_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/font_manager.dart';
@@ -11,36 +8,36 @@ import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
 
+import '../../../data/mapper/mapper.dart';
+
 enum StateRendererType {
   // POPUP STATES
-  POPUP_LOADING_STATE,
-  POPUP_ERROR_STATE,
-  POPUP_SUCCESS,
+  popupLoadingState,
+  popupErrorState,
+  popupsuccess,
   // FULL SCREEN STATES
-  FULL_SCREEN_LOADING_STATE,
-  FULL_SCREEN_ERROR_STATE,
-  CONTENT_SCREEN_STATE, // THE UI OF THE SCREEN
-  EMPTY_SCREEN_STATE // EMPTY VIEW WHEN WE RECEIVE NO DATA FROM API SIDE FOR LIST SCREEN
+  fullScreenLoadingState,
+  fullScreenErrorState,
+  contentScreenState, // THE UI OF THE SCREEN
+  emptyScreenState // EMPTY VIEW WHEN WE RECEIVE NO DATA FROM API SIDE FOR LIST SCREEN
 }
 
 class StateRenderer extends StatelessWidget {
-  StateRendererType stateRendererType;
-  String message;
-  String title;
-  Function? retryActionFunction;
-  Function resetFlowState;
+  final StateRendererType stateRendererType;
+  final String message;
+  final String title;
+  final Function? retryActionFunction;
+  final Function resetFlowState;
 
-  StateRenderer(
-      {Key? key,
-      required this.stateRendererType,
-      String? message,
-      String? title,
-      required this.retryActionFunction,
-      required this.resetFlowState})
-      : message = message ?? AppStrings.loading,
-        title = title ?? EMPTY,
-        super(key: key);
-
+  const StateRenderer({
+    super.key,
+    required this.stateRendererType,
+    String? message,
+    String? title,
+    required this.retryActionFunction,
+    required this.resetFlowState,
+  })  : message = message ?? AppStrings.loading,
+        title = title ?? empty;
   @override
   Widget build(BuildContext context) {
     return _getStateWidget(context);
@@ -48,36 +45,36 @@ class StateRenderer extends StatelessWidget {
 
   Widget _getStateWidget(BuildContext context) {
     switch (stateRendererType) {
-      case StateRendererType.POPUP_LOADING_STATE:
+      case StateRendererType.popupLoadingState:
         return _getPopUpDialog(
             context, [_getAnimatedImage(JsonAssets.loading)]);
-      case StateRendererType.POPUP_ERROR_STATE:
+      case StateRendererType.popupErrorState:
         return _getPopUpDialog(context, [
           _getAnimatedImage(JsonAssets.error),
           _getMessage(message),
           _getRetryButton(AppStrings.ok, context)
         ]);
-      case StateRendererType.POPUP_SUCCESS:
+      case StateRendererType.popupsuccess:
         return _getPopUpDialog(context, [
           _getAnimatedImage(JsonAssets.success),
           _getMessage(title),
           _getMessage(message),
           _getRetryButton(AppStrings.ok, context)
         ]);
-      case StateRendererType.FULL_SCREEN_LOADING_STATE:
+      case StateRendererType.fullScreenLoadingState:
         return _getItemsInColumn([
           _getAnimatedImage(JsonAssets.loading),
           _getMessage(message),
         ]);
-      case StateRendererType.FULL_SCREEN_ERROR_STATE:
+      case StateRendererType.fullScreenErrorState:
         return _getItemsInColumn([
           _getAnimatedImage(JsonAssets.error),
           _getMessage(message),
           _getRetryButton(AppStrings.retryAgain, context)
         ]);
-      case StateRendererType.CONTENT_SCREEN_STATE:
+      case StateRendererType.contentScreenState:
         return Container();
-      case StateRendererType.EMPTY_SCREEN_STATE:
+      case StateRendererType.emptyScreenState:
         return _getItemsInColumn([
           _getAnimatedImage(JsonAssets.empty),
           _getMessage(message),
@@ -98,7 +95,7 @@ class StateRenderer extends StatelessWidget {
             color: ColorManager.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(AppSize.s14),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black26,
                   blurRadius: AppSize.s12,
@@ -148,7 +145,7 @@ class StateRenderer extends StatelessWidget {
           child: ElevatedButton(
               onPressed: () {
                 if (stateRendererType ==
-                    StateRendererType.FULL_SCREEN_ERROR_STATE) {
+                    StateRendererType.fullScreenErrorState) {
                   retryActionFunction
                       ?.call(); // to call the API function again to retry
                 } else {
