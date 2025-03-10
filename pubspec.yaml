@@ -53,6 +53,8 @@ dependencies:
   archive: ^3.6.1
   country_code_picker: ^3.2.0
   image_picker: ^1.1.2
+  rxdart: ^0.28.0
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
