@@ -57,19 +57,19 @@ ThemeData getApplicationTheme() {
       displayLarge: getSemiBoldStyle(
           color: ColorManager.darkGrey, fontSize: FontSize.s16), // headline1
       displayMedium: getRegularStyle(
-          color: ColorManager.white, fontSize: FontSize.s16), // headline1
-
-      titleLarge:
-          getBoldStyle(color: ColorManager.primary, fontSize: FontSize.s16),
+          color: ColorManager.white, fontSize: FontSize.s16), // headline2
+      displaySmall: getBoldStyle(
+          color: ColorManager.primary, fontSize: FontSize.s16), // headline3
+      headlineMedium: getRegularStyle(
+          color: ColorManager.primary, fontSize: FontSize.s14), // headline4
       titleMedium: getMediumStyle(
-        color: ColorManager.lightGrey,
-        fontSize: FontSize.s14,
-      ), // subtitle1
+          color: ColorManager.lightGrey, fontSize: FontSize.s14), // subtitle1
       titleSmall: getMediumStyle(
-        color: ColorManager.primary,
-        fontSize: FontSize.s12,
-      ), // subtitle1/ subtitle2
+          color: ColorManager.primary, fontSize: FontSize.s14), //  subtitle2
+
+      bodyMedium: getMediumStyle(color: ColorManager.lightGrey), // bodyText2
       bodySmall: getRegularStyle(color: ColorManager.grey1), // caption
+
       bodyLarge: getRegularStyle(color: ColorManager.grey), // bodyText1
     ),
     // input decoration theme (text form field)

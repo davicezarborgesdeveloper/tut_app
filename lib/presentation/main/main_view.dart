@@ -17,10 +17,10 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   List<Widget> pages = [
-    HomePage(),
-    SearchPage(),
-    NotificationsPage(),
-    SettingsPage(),
+    const HomePage(),
+    const SearchPage(),
+    const NotificationsPage(),
+    const SettingsPage(),
   ];
 
   List<String> titles = [
@@ -56,7 +56,7 @@ class _MainViewState extends State<MainView> {
           unselectedItemColor: ColorManager.grey,
           currentIndex: _currentIndex,
           onTap: onTap,
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.home), label: AppStrings.home),
             BottomNavigationBarItem(

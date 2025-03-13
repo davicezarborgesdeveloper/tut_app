@@ -5,7 +5,7 @@ import 'package:complete_advanced_flutter/domain/usecase/base_usecase.dart';
 import 'package:dartz/dartz.dart';
 
 class HomeUseCase extends BaseUseCase<void, HomeObject> {
-  Repository _repository;
+  final Repository _repository;
 
   HomeUseCase(this._repository);
 

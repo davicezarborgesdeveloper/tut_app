@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:complete_advanced_flutter/data/data_source/local_data_source.dart';
 import 'package:complete_advanced_flutter/data/data_source/remote_data_source.dart';
 import 'package:complete_advanced_flutter/data/mapper/mapper.dart';
 import 'package:complete_advanced_flutter/data/network/error_handler.dart';
@@ -13,9 +14,11 @@ import 'package:dio/dio.dart';
 
 class RepositoryImpl implements Repository {
   final RemoteDataSource _remoteDataSource;
+  final LocalDataSource _localDataSource;
   final NetworkInfo _networkInfo;
 
-  RepositoryImpl(this._remoteDataSource, this._networkInfo);
+  RepositoryImpl(
+      this._remoteDataSource, this._localDataSource, this._networkInfo);
 
   @override
   Future<Either<Failure, Authentication>> login(
@@ -91,28 +94,65 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<Either<Failure, HomeObject>> getHome() async {
-    if (await _networkInfo.isConnected) {
-      try {
-        // its safe to call the API
-        final response = await _remoteDataSource.getHome();
+    try {
+      // get from cache
+      final response = _localDataSource.getHome();
 
-        if (response.status == ApiInternalStatus.success) // success
-        {
-          // return data (success)
-          // return right
-          return Right(response.toDomain());
-        } else {
-          // return biz logic error
-          // return left
-          return Left(Failure(response.status ?? ApiInternalStatus.failure,
-              response.message ?? ResponseMessage.unknown));
+      return Right(response.toDomain());
+    } catch (cacheError) {
+      // we have cache error so we should call API
+      if (await _networkInfo.isConnected) {
+        try {
+          // its safe to call the API
+          final response = await _remoteDataSource.getHome();
+
+          if (response.status == ApiInternalStatus.success) // success
+          {
+            // return data (success)
+            // return right
+            // save response to local data source
+            _localDataSource.saveHomeToCache(response);
+            return Right(response.toDomain());
+          } else {
+            // return biz logic error
+            // return left
+            return Left(Failure(response.status ?? ApiInternalStatus.failure,
+                response.message ?? ResponseMessage.unknown));
+          }
+        } catch (error) {
+          return (Left(ErrorHandler.handle(error).failure));
         }
-      } catch (error) {
-        return (Left(ErrorHandler.handle(error).failure));
+      } else {
+        // return connection error
+        return Left(DataSource.noInternetConnection.getFailure());
       }
-    } else {
-      // return connection error
-      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, StoreDetails>> getStoreDetails() async {
+    try {
+      // get data from cache
+
+      final response = _localDataSource.getStoreDetails();
+      return Right(response.toDomain());
+    } catch (cacheError) {
+      if (await _networkInfo.isConnected) {
+        try {
+          final response = await _remoteDataSource.getStoreDetails();
+          if (response.status == ApiInternalStatus.success) {
+            _localDataSource.saveStoreDetailsToCache(response);
+            return Right(response.toDomain());
+          } else {
+            return Left(Failure(response.status ?? ResponseCode.unknown,
+                response.message ?? ResponseMessage.unknown));
+          }
+        } catch (error) {
+          return Left(ErrorHandler.handle(error).failure);
+        }
+      } else {
+        return Left(DataSource.noInternetConnection.getFailure());
+      }
     }
   }
 }
